@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-# V1FS-GO-Scanner
-V1FS-GO-Scanner
-
-Build Binary: <br>
-`go build main.go`
-
-
-Example Usage:</br>
-`./main -apiKey=$apiKey -region=$region -directory="/Users/hunter/Desktop/test" -tags=project1,test -verbose=true -maxWorkers=2`
-=======
 # Vision One File Security Go Scanner
 
 The scanner is a Go binary designed to function as a command-line program. It recursively scans all items in a given directory path with advanced optimization features for large-scale scanning operations, including checkpoint recovery for interrupted scans.
@@ -90,6 +79,35 @@ The scanner implements automatic checkpoint recovery with the following features
 - For local SSDs, try 200-300 workers
 - For network storage, reduce to 50-100
 
+### Recommended Directory Exclusions
+When scanning Linux systems, certain directories should typically be excluded to optimize performance and avoid unnecessary scanning. Here's a list of recommended directories to exclude and why:
+
+| Directory | Reason for Exclusion |
+|-----------|---------------------|
+| /sys | Virtual filesystem for kernel objects, not containing real files |
+| /proc | Virtual filesystem for process information, not containing real files |
+| /dev | Device files and special files, not relevant for malware scanning |
+| /run | Runtime system information, temporary files |
+| /var/lib/docker | Container runtime files, should be scanned separately |
+| /var/run | Runtime variable data, symbolic link to /run |
+| /boot | Static boot loader files, rarely a target for malware |
+
+To use these exclusions, create a file (e.g., `exclusions.txt`) with these paths:
+```
+/sys
+/proc
+/dev
+/run
+/var/lib/docker
+/var/run
+/boot
+```
+
+Then use it with the `-exclude-dir` flag:
+```sh
+-exclude-dir=exclusions.txt
+```
+
 ### Example Configurations
 
 #### Basic Usage
@@ -122,4 +140,3 @@ The scanner implements automatic checkpoint recovery with the following features
   -internal_service="fs-service" \
   -internal_tls=true
 ```
->>>>>>> b83e2c0 (add checkpoint recovery and improve scanner robustness)
